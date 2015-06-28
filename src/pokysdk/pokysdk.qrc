@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/pokysdk">
+        <file>images/poky.png</file>
+    </qresource>
+</RCC>
