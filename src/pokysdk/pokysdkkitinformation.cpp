@@ -28,9 +28,11 @@
 #include <QFile>
 
 #include <projectexplorer/toolchain.h>
+#include <utils/environment.h>
 
 #include "pokysdkkitinformation.h"
 #include "pokysdkplugin.h"
+#include "pokyrunner.hpp"
 
 using namespace PokySDK;
 using namespace ProjectExplorer;
@@ -97,6 +99,17 @@ FileName PokySDKKitInformation::environmentFile(const Kit *kit)
         return envFile;
     else
         return FileName();
+}
+
+void PokySDKKitInformation::addToEnvironment(const Kit *kit, Environment &env) const
+{
+    FileName pokyEnvFile = environmentFile(kit);
+    if (pokyEnvFile.isEmpty())
+        return;
+    PokyRunner runner(pokyEnvFile.toString());
+    QProcessEnvironment pokyEnv = runner.processEnvironment();
+    foreach (QString key, pokyEnv.keys())
+        env.set(key, pokyEnv.value(key));
 }
 
 FileName PokySDKKitInformation::findEnvFromSysroot(const FileName &sysRoot)

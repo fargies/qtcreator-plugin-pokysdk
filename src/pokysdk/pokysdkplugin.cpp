@@ -44,6 +44,8 @@
 #include <qtsupport/qtversionmanager.h>
 #include <qtsupport/qtkitinformation.h>
 
+#include <qmakeprojectmanager/qmakekitinformation.h>
+
 #include <remotelinux/remotelinux_constants.h>
 
 #include <utils/environment.h>
@@ -65,6 +67,7 @@ using namespace Debugger;
 using namespace QtSupport;
 using namespace Utils;
 using namespace RemoteLinux;
+using namespace QmakeProjectManager;
 
 PokySDKPlugin::PokySDKPlugin()
 {
@@ -118,8 +121,6 @@ ProjectExplorer::Kit *PokySDKPlugin::detectKit(const QString &name, const QStrin
         toolchain->setDisplayName(name + QLatin1String(" toolchain"));
 
         toolchain->setCompilerCommand(FileName::fromString(compiler));
-//        toolchain->setTargetAbi(Abi::abiFromTargetTriplet(targetTriplet));
-
 
         if (!ToolChainManager::registerToolChain(toolchain))
             qWarning() << "[PokySDK]: failed to register toolchain";
@@ -197,7 +198,10 @@ ProjectExplorer::Kit *PokySDKPlugin::detectKit(const QString &name, const QStrin
         if (tcObject)
             ToolChainKitInformation::setToolChain(kit, tcObject);
         if (qt5Object)
+        {
             QtKitInformation::setQtVersion(kit, qt5Object);
+            QmakeKitInformation::setMkspec(kit, qt5Object->mkspec());
+        }
         if (dbgObject)
             DebuggerKitInformation::setDebugger(kit, dbgObject->id());
 

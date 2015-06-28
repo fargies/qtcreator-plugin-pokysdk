@@ -49,12 +49,11 @@ public:
     static bool isPokySDKKit(const ProjectExplorer::Kit *kit);
     static Utils::FileName environmentFile(const ProjectExplorer::Kit *kit);
 
+    void addToEnvironment(const ProjectExplorer::Kit *kit, Utils::Environment &env) const;
+
 protected:
     static Utils::FileName findEnvFromSysroot(const Utils::FileName &sysRoot);
     static Utils::FileName findEnvFromCompiler(const Utils::FileName &compilerCommand);
-
-    QString m_envFile;
-
 };
 
 }
